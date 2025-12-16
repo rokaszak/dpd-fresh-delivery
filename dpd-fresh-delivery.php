@@ -52,11 +52,12 @@ function dpd_fresh_init() {
     // Load required files
     require_once DPD_FRESH_PLUGIN_DIR . 'includes/class-dpd-database.php';
     require_once DPD_FRESH_PLUGIN_DIR . 'public/class-dpd-fresh-public-email.php';
+    
+    require_once DPD_FRESH_PLUGIN_DIR . 'admin/class-dpd-admin-settings.php';
 
     // Admin functionality
     if (is_admin()) {
         require_once DPD_FRESH_PLUGIN_DIR . 'admin/class-dpd-admin-orders.php';
-        require_once DPD_FRESH_PLUGIN_DIR . 'admin/class-dpd-admin-settings.php';
         DPD_Fresh_Admin_Settings::init();
     }
 
@@ -64,6 +65,8 @@ function dpd_fresh_init() {
     $dpd_fresh_email = new DPD_Fresh_Public_Email('dpd-fresh-delivery', DPD_FRESH_VERSION);
     add_action('woocommerce_email_before_order_table', array($dpd_fresh_email, 'add_dpd_fresh_tracking_number'), 10, 4);
     add_action('woocommerce_email_after_order_table', array($dpd_fresh_email, 'add_dpd_fresh_delivery_address'), 10, 4);
+    
+    add_filter('thwcfe_input_field_options_reservation_date', 'dpd_fresh_filter_reservation_date_options', 10, 1);
 }
 
 // Register shipping method
@@ -406,3 +409,128 @@ function dpd_fresh_add_logo($label, $method) {
     return '<span class="dpd-fresh-logo-wrapper">' . $logo . $label . '</span>';
 }
 
+
+add_filter('woocommerce_update_order_review_fragments', 'dpd_fresh_update_checkout_fragments', 10, 1);
+function dpd_fresh_update_checkout_fragments($fragments) {
+    $chosen_shipping_methods = WC()->session->get('chosen_shipping_methods');
+    $is_dpd_fresh = false;
+    
+    if (!empty($chosen_shipping_methods) && is_array($chosen_shipping_methods)) {
+        foreach ($chosen_shipping_methods as $method) {
+            if (strpos($method, 'dpd_fresh_delivery') !== false) {
+                $is_dpd_fresh = true;
+                break;
+            }
+        }
+    }
+    
+    if ($is_dpd_fresh) {
+        ob_start();
+        ?>
+        <div class="woocommerce-shipping-fields__field-wrapper">
+            <?php
+            $checkout = WC()->checkout();
+            $fields = $checkout->get_checkout_fields('shipping');
+            foreach ($fields as $key => $field) {
+                woocommerce_form_field($key, $field, $checkout->get_value($key));
+            }
+            ?>
+        </div>
+        <?php
+        $fragments['.woocommerce-shipping-fields__field-wrapper'] = ob_get_clean();
+    }
+    
+    return $fragments;
+}
+
+/**
+ * Filter reservation_date field options based on DPD Fresh settings
+ * Only applies when DPD Fresh shipping method is selected and custom dates are enabled
+ */
+function dpd_fresh_filter_reservation_date_options($options) {
+    // Ensure we have valid options array - plugin expects array
+    if (!is_array($options)) {
+        $options = [];
+    }
+    
+    // Only run on frontend checkout or AJAX requests (not in admin pages)
+    if (is_admin() && !wp_doing_ajax()) {
+        return $options;
+    }
+    
+    // Check if class exists
+    if (!class_exists('DPD_Fresh_Admin_Settings')) {
+        return $options;
+    }
+    
+    try {
+        // Get DPD Fresh settings
+        $settings = DPD_Fresh_Admin_Settings::get_settings();
+        
+        // If custom dates feature is disabled, return original options
+        if (empty($settings['enable_custom_dates'])) {
+            return $options;
+        }
+        
+        // Check if WooCommerce is available
+        if (!function_exists('WC') || !WC()) {
+            return $options;
+        }
+        
+        // Check if cart exists and has items
+        if (!WC()->cart || WC()->cart->is_empty()) {
+            return $options;
+        }
+        
+        // Check if session is available
+        if (!WC()->session) {
+            return $options;
+        }
+        
+        // Get the selected shipping method
+        $chosen_shipping_methods = WC()->session->get('chosen_shipping_methods');
+        
+        // If no shipping method selected yet, return original options
+        if (empty($chosen_shipping_methods) || !is_array($chosen_shipping_methods)) {
+            return $options;
+        }
+        
+        $selected_shipping_method = !empty($chosen_shipping_methods[0]) ? $chosen_shipping_methods[0] : '';
+        
+        // Check if DPD Fresh shipping method is selected
+        if (empty($selected_shipping_method) || strpos($selected_shipping_method, 'dpd_fresh_delivery') === false) {
+            // Not DPD Fresh, return original options
+            return $options;
+        }
+        
+        $reservation_dates = !empty($settings['reservation_dates']) && is_array($settings['reservation_dates']) 
+            ? $settings['reservation_dates'] 
+            : [];
+        
+        if (empty($reservation_dates)) {
+            return [];
+        }
+        
+        $custom_options = [];
+        foreach ($reservation_dates as $date_entry) {
+            if (!empty($date_entry['date']) && !empty($date_entry['text'])) {
+                $date_key = sanitize_text_field($date_entry['date']);
+                $date_text = sanitize_text_field($date_entry['text']);
+                
+                if (!empty($date_key) && !empty($date_text)) {
+                    $custom_options[$date_key] = [
+                        'key' => $date_key,
+                        'text' => $date_text,
+                        'price' => '',
+                        'price_type' => ''
+                    ];
+                }
+            }
+        }
+        
+        return !empty($custom_options) ? $custom_options : [];
+        
+    } catch (Exception $e) {
+        return $options;
+    }
+}
