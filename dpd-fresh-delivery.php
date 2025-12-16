@@ -412,22 +412,9 @@ function dpd_fresh_add_logo($label, $method) {
 
 add_filter('woocommerce_update_order_review_fragments', 'dpd_fresh_update_checkout_fragments', 10, 1);
 function dpd_fresh_update_checkout_fragments($fragments) {
-    $chosen_shipping_methods = WC()->session->get('chosen_shipping_methods');
-    $is_dpd_fresh = false;
-    
-    if (!empty($chosen_shipping_methods) && is_array($chosen_shipping_methods)) {
-        foreach ($chosen_shipping_methods as $method) {
-            if (strpos($method, 'dpd_fresh_delivery') !== false) {
-                $is_dpd_fresh = true;
-                break;
-            }
-        }
-    }
-    
-    if ($is_dpd_fresh) {
-        ob_start();
-        ?>
-        <div class="woocommerce-shipping-fields__field-wrapper">
+    ob_start();
+    ?>
+    <div class="woocommerce-shipping-fields__field-wrapper">
             <?php
             $checkout = WC()->checkout();
             $fields = $checkout->get_checkout_fields('shipping');
@@ -435,11 +422,9 @@ function dpd_fresh_update_checkout_fragments($fragments) {
                 woocommerce_form_field($key, $field, $checkout->get_value($key));
             }
             ?>
-        </div>
-        <?php
-        $fragments['.woocommerce-shipping-fields__field-wrapper'] = ob_get_clean();
-    }
-    
+    </div>
+    <?php
+    $fragments['.woocommerce-shipping-fields__field-wrapper'] = ob_get_clean();
     return $fragments;
 }
 
