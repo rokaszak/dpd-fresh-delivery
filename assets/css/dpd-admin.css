@@ -1,0 +1,239 @@
+/* DPD Fresh Admin Styles */
+
+.dpd-fresh-filters {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+}
+
+.dpd-fresh-filters-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 15px;
+}
+
+.dpd-fresh-filter label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.dpd-fresh-results-info {
+    margin-bottom: 10px;
+}
+
+/* Table columns */
+.dpd-fresh-table .column-order {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dpd-fresh-table .column-buyer {
+    width: 10%;
+}
+
+.dpd-fresh-table .column-shipping {
+    width: 10%;
+}
+
+.dpd-fresh-table .column-items {
+    width: 20%;
+}
+
+.dpd-fresh-table .column-address {
+    width: 15%;
+}
+
+.dpd-fresh-table .column-reservation {
+    width: 10%;
+}
+
+.dpd-fresh-table .column-actions {
+    width: 20%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.widefat td,
+.widefat th {
+    padding: 8px 8px;
+}
+
+/* Mini rows */
+.mini-row {
+    border-bottom: 1px solid #d7d7d7;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.column-items .mini-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Copy functionality */
+.copy-target {
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+    background: #e3e3e3;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    margin-bottom: 0.25rem;
+    transition: all 0.35s ease;
+    display: block;
+    width: fit-content;
+}
+
+.copy-target:hover {
+    background: #f4f4f4;
+    border: 1px solid #959595;
+    opacity: 0.9;
+}
+
+.copy-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    white-space: nowrap;
+    opacity: 0.9;
+    z-index: 99999;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Popup */
+.dpd-fresh-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.dpd-fresh-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    width: 400px;
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dpd-fresh-popup-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dpd-fresh-popup-header h3 {
+    margin: 0;
+}
+
+.dpd-fresh-popup-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+}
+
+.dpd-fresh-popup-content {
+    padding: 20px;
+}
+
+.dpd-fresh-popup-footer {
+    padding: 15px 20px;
+    background: #f9f9f9;
+    border-top: 1px solid #eee;
+    text-align: right;
+    border-radius: 0 0 4px 4px;
+}
+
+.dpd-fresh-form-group input {
+    width: 100%;
+}
+
+.dpd-fresh-export-section {
+    margin-top: 30px;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+}
+
+/* Order Status Badges */
+.order-status {
+    display: inline-flex;
+    line-height: 2.5em;
+    color: #777;
+    background: #e5e5e5;
+    border-radius: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, .05);
+    margin: -.25em 0;
+    cursor: inherit !important;
+    white-space: nowrap;
+    max-width: 100%;
+    padding: 0 10px;
+}
+
+.order-status.status-processing {
+    background: #c6e1c6;
+    color: #5b841b;
+}
+
+.order-status.status-completed {
+    background: #c8d7e1;
+    color: #2e4453;
+}
+
+.order-status.status-cancelled,
+.order-status.status-failed {
+    background: #e5e5e5;
+    color: #a00;
+}
+
+.order-status.status-on-hold {
+    background: #f8dda7;
+    color: #946f29;
+}
+
+.order-status.status-pending {
+    background: #e5e5e5;
+    color: #777;
+}
+
+/* Sortable Headers */
+.column-order a,
+.column-reservation a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.column-order a:hover,
+.column-reservation a:hover {
+    color: #0073aa;
+}
+

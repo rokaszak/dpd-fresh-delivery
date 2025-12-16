@@ -1,0 +1,92 @@
+/**
+ * DPD Fresh Map Styles
+ */
+
+.wc-dpd-fresh-map-selector {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Hide map wrapper by default - JavaScript will show it when DPD Fresh is selected */
+#dpd-fresh-map-wrapper {
+    display: none;
+}
+
+#dpd-fresh-map-wrapper.dpd-loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.dpd-fresh-delivery-wrapper {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.dpd-fresh-delivery-wrapper h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #333;
+}
+
+#dpd_fresh_map {
+    height: 400px;
+    width: 100%;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.dpd-fresh-delivery-wrapper .form-row {
+    margin-bottom: 0;
+}
+
+/* DPD Fresh logo in shipping method */
+.dpd-fresh-logo-wrapper img {
+    max-height: 25px;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    #dpd_fresh_map {
+        height: 300px;
+    }
+    
+    .dpd-fresh-delivery-wrapper {
+        padding: 15px;
+    }
+}
+
+/* Loading indicator */
+.dpd-fresh-loading {
+    position: relative;
+}
+
+.dpd-fresh-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #333;
+    border-radius: 50%;
+    animation: dpd-fresh-spin 1s linear infinite;
+}
+
+@keyframes dpd-fresh-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+

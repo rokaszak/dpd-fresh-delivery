@@ -1,0 +1,23 @@
+#dpd-fresh-dates-table {
+    margin-top: 10px;
+    table-layout: fixed;
+}
+
+#dpd-fresh-dates-table th:nth-child(1),
+#dpd-fresh-dates-table td:nth-child(1) {
+    width: 35%;
+}
+
+#dpd-fresh-dates-table th:nth-child(2),
+#dpd-fresh-dates-table td:nth-child(2) {
+    width: 45%;
+}
+
+#dpd-fresh-dates-table th:nth-child(3),
+#dpd-fresh-dates-table td:nth-child(3) {
+    width: 20%;
+}
+
+#dpd-fresh-dates-table input[type="text"] {
+    width: 100%;
+}
